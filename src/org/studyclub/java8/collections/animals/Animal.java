@@ -5,7 +5,7 @@ import org.studyclub.java8.collections.fruits.Fruit;
 public interface Animal {
 
 	default String name() {
-		return this.getClass().getCanonicalName();
+		return "AnonimousAnimal";
 	}
 
 	default void eat(Fruit fruit) {

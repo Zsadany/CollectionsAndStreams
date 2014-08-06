@@ -20,6 +20,11 @@ public class Prune implements Fruit {
 	}
 	
 	@Override
+	public String name() {
+		return "Prune";
+	}
+	
+	@Override
 	public Taste taste() {
 		return Taste.NEUTRAL;
 	}
@@ -37,6 +42,11 @@ public class Prune implements Fruit {
 	@Override
 	public boolean isRotten() {
 		return rotten;
+	}
+
+	@Override
+	public String toString() {
+		return name();
 	}
 
 }

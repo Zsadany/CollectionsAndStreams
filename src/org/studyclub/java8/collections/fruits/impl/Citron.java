@@ -20,6 +20,11 @@ public class Citron implements Fruit {
 	}
 	
 	@Override
+	public String name() {
+		return "Citron";
+	}
+	
+	@Override
 	public Taste taste() {
 		return Fruit.Taste.SOUR;
 	}
@@ -37,6 +42,11 @@ public class Citron implements Fruit {
 	@Override
 	public boolean isRotten() {
 		return rotten;
+	}
+
+	@Override
+	public String toString() {
+		return name();
 	}
 
 }

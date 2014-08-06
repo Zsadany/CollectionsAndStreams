@@ -20,6 +20,11 @@ public class Pineapple implements Fruit {
 	}
 
 	@Override
+	public String name() {
+		return "Pineapple";
+	}
+	
+	@Override
 	public Taste taste() {
 		return Taste.SWEET_AND_SOUR;
 	}
@@ -37,6 +42,11 @@ public class Pineapple implements Fruit {
 	@Override
 	public boolean isRotten() {
 		return rotten;
+	}
+
+	@Override
+	public String toString() {
+		return name();
 	}
 
 }

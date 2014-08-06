@@ -4,10 +4,10 @@ import java.util.Set;
 
 import javafx.scene.paint.Color;
 
-public interface Fruit {
+public interface Fruit extends Comparable<Fruit> {
 	
 	default String name() {
-		return this.getClass().getCanonicalName();
+		return "AnonimousFruit";
 	}
 	
 	Taste taste();
@@ -18,6 +18,11 @@ public interface Fruit {
 	
 	boolean isRotten();
 	
+	@Override
+	default int compareTo(Fruit o) {
+		return name().compareTo(o.name());
+	}
+	
 	enum Vitamin {
 		A,B6,B12,C,D,E;
 	}
@@ -25,4 +30,5 @@ public interface Fruit {
 	enum Taste {
 		SOUR,SWEET_AND_SOUR,NEUTRAL,SWEET,ROTTEN;
 	}
+	
 }
