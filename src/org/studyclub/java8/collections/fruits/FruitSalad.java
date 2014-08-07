@@ -2,6 +2,9 @@ package org.studyclub.java8.collections.fruits;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Predicate;
+
+import org.studyclub.java8.collections.fruits.Fruit.Taste;
 
 public class FruitSalad {
 
@@ -18,6 +21,21 @@ public class FruitSalad {
 
 	public FruitSalad addAllFruits(Collection<Fruit> fruits) {
 		this.fruits.addAll(fruits);
+		return this;
+	}
+	
+	public FruitSalad removeFruitsWith(Taste taste) {
+		fruits.removeIf(f -> f.taste() == taste);
+		return this;
+	}
+	
+	public FruitSalad removeRottenFruits() {
+		fruits.removeIf(f -> f.isRotten());
+		return this;
+	}
+	
+	public FruitSalad keepFruitsThatAre(Predicate<Fruit> fruitFilter) {
+		fruits.removeIf(fruitFilter.negate());
 		return this;
 	}
 

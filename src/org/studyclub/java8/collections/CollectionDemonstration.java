@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -19,6 +18,9 @@ import org.studyclub.java8.collections.fruits.Fruit;
 import org.studyclub.java8.collections.fruits.FruitJuice;
 import org.studyclub.java8.collections.fruits.FruitJuiceMakingStrategy;
 import org.studyclub.java8.collections.fruits.FruitSalad;
+import org.studyclub.java8.collections.fruits.impl.Orange;
+import org.studyclub.java8.collections.fruits.impl.Citron;
+import org.studyclub.java8.collections.fruits.impl.Banana;
 
 public class CollectionDemonstration {
 
@@ -138,49 +140,49 @@ public class CollectionDemonstration {
 	
 	private static void makeFruitJuice(Collection<Fruit> fruits) {
 		println("makeFruitJuice() {");
-//		
-//		Collector<Fruit,FruitSalad,FruitSalad> fruitSaladCollector = new Collector<Fruit, FruitSalad, FruitSalad>() {
-//
-//			@Override
-//			public Supplier<FruitSalad> supplier() {
-//				return FruitSalad::new;
-//			}
-//
-//			@Override
-//			public BiConsumer<FruitSalad, Fruit> accumulator() {
-//				return FruitSalad::addFruit;
-//			}
-//
-//			@Override
-//			public BinaryOperator<FruitSalad> combiner() {
-//				return FruitSalad::mixWith;
-//			}
-//
-//			@Override
-//			public Function<FruitSalad, FruitSalad> finisher() {
-//				return f -> f;
-//			}
-//
-//			@Override
-//			public Set<java.util.stream.Collector.Characteristics> characteristics() {
-//				Set<Characteristics> characteristics =new HashSet<>();
-//				characteristics.add(Characteristics.UNORDERED);
-//				return characteristics;
-//			}
-//		};
 		
-		Stream<Fruit> fruitStream = fruits.stream();
-//		FruitSalad fruitSalad = fruitStream.collect(fruitSaladCollector);
+		FruitSalad fruitSalad = fruits.stream().collect(FruitSalad::new, FruitSalad::addFruit, FruitSalad::mixWith);
 		
-		// or the much simpler
-		FruitSalad fruitSalad = fruitStream.collect(FruitSalad::new, FruitSalad::addFruit, FruitSalad::mixWith);
-		FruitJuiceMakingStrategy fruitJuiceReceipt = new FruitJuiceMakingStrategy();
-		// TODO add receipt steps with addFunctionToProcessingChain
-		FruitJuice juice = fruitJuiceReceipt.executeOn(fruitSalad);
-		juice.drink();
+		makeHealthyFruitJuice(fruitSalad);
+		makeSweetFruitJuice(fruitSalad);
+		makeSourFruitJuice(fruitSalad);
 		
 		println("}");
 		println();
+	}
+
+	private static void makeHealthyFruitJuice(FruitSalad fruitSalad) {
+		FruitJuiceMakingStrategy healthyFruitJuiceReceipt = new FruitJuiceMakingStrategy();
+		healthyFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.addFruit(new Orange(2)));
+		healthyFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.addFruit(new Citron(2)));
+		healthyFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.addFruit(new Banana(2)));
+		healthyFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.keepFruitsThatAre(HEALTHY_FRUIT));
+		healthyFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.removeRottenFruits());
+		
+		FruitJuice healthyFruitJuice = healthyFruitJuiceReceipt.executeOn(fruitSalad);
+		healthyFruitJuice.drinkSome();
+	}
+	
+	private static void makeSweetFruitJuice(FruitSalad fruitSalad) {
+		FruitJuiceMakingStrategy sweetFruitJuiceReceipt = new FruitJuiceMakingStrategy();
+		sweetFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.addFruit(new Orange(2)));
+		sweetFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.removeFruitsWith(Taste.SOUR));
+		sweetFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.removeRottenFruits());
+		
+		FruitJuice sweetFruitJuice = sweetFruitJuiceReceipt.executeOn(fruitSalad);
+		sweetFruitJuice.drinkSome();
+	}
+	
+	private static void makeSourFruitJuice(FruitSalad fruitSalad) {
+		FruitJuiceMakingStrategy sourFruitJuiceReceipt = new FruitJuiceMakingStrategy();
+		sourFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.addFruit(new Citron(2)));
+		sourFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.addFruit(new Banana(2)));
+		sourFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.removeFruitsWith(Taste.SWEET));
+		sourFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.removeFruitsWith(Taste.NEUTRAL));
+		sourFruitJuiceReceipt.addFunctionToProcessingChain(fs -> fs.removeRottenFruits());
+		
+		FruitJuice sourFruitJuice = sourFruitJuiceReceipt.executeOn(fruitSalad);
+		sourFruitJuice.drinkSome();
 	}
 
 	public static void println() {

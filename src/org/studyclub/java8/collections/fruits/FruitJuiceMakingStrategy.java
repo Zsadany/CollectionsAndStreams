@@ -24,6 +24,9 @@ public class FruitJuiceMakingStrategy {
 		};
 	}
 	
+	//TODO static factory methods with different strategies ex.: sequentialFruitJuiceMakingStrategy (init with a list),
+	// parallelFruitJuiceMakingStrategy (convert the fruits into a parallelStream in the juice finisher)
+	
 	public void addFunctionToProcessingChain (Function<FruitSalad,FruitSalad> fruitSaladPreparationStep) {
 		fruitSaladProcessingChain.add(fruitSaladPreparationStep);
 	}

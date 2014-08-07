@@ -8,7 +8,7 @@ public class FruitJuice {
 		this.name = name;
 	}
 	
-	public void drink() {
+	public void drinkSome() {
 		System.out.println("You just drank a glass of " + name + "!");
 	}
 	
