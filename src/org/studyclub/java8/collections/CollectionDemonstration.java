@@ -42,9 +42,9 @@ public class CollectionDemonstration {
 	private static final Predicate<Fruit> ROTTEN = fruit -> fruit.isRotten();
 	private static final Predicate<Fruit> HEALTHY_FRUIT = HAS_C_VITAMIN.or(HAS_B6_VITAMIN).or(HAS_B12_VITAMIN).and(ROTTEN.negate());
 
-	private static final Consumer<Fruit> printFruitName = fruit -> print(fruit.name() + " is:");
-	private static final Consumer<Fruit> printFruitTaste = fruit -> print(fruit.taste());
-	private static final Consumer<Fruit> printNewline = fruit -> println();
+	private static final Consumer<Fruit> PRINT_FRUIT_NAME = fruit -> print(fruit.name() + " is:");
+	private static final Consumer<Fruit> PRINT_FRUIT_TASTE = fruit -> print(fruit.taste());
+	private static final Consumer<Fruit> PRINT_NEW_LINE = fruit -> println();
 	
 	public static void demonstrate(Collection<Fruit> fruits, Collection<Animal> animals) {
 		feedAnimalsWithRottenFruit(fruits, animals);
@@ -76,8 +76,6 @@ public class CollectionDemonstration {
 		print("Current fruits: ");
 		println(fruits);
 		Stream<Fruit> fruitStream = fruits.stream();
-//		if(!fruitStream.allMatch(ROTTEN.negate()))
-		// is the same as
 		if (fruitStream.anyMatch(ROTTEN)) {
 			println("Removing rotten fruits!");
 			fruits.removeIf(ROTTEN);
@@ -113,10 +111,9 @@ public class CollectionDemonstration {
 		println("printSweetFruits() {");
 		
 		List<Fruit> sweetFruits = fruits.stream().filter(SWEET_FRUIT).collect(Collectors.toList());
-		sweetFruits.forEach(
-				printFruitName
-				.andThen(printFruitTaste)
-				.andThen(printNewline)
+		sweetFruits.forEach(PRINT_FRUIT_NAME
+				.andThen(PRINT_FRUIT_TASTE)
+				.andThen(PRINT_NEW_LINE)
 		);
 		
 		println("}");
@@ -129,9 +126,9 @@ public class CollectionDemonstration {
 		Collection<Fruit> healthyFruits = fruits.stream().filter(SWEET_FRUIT).collect(Collectors.toList());
 		Comparator<Fruit> fruitByName = (f1,f2) -> f1.name().compareTo(f2.name());
 		healthyFruits.stream().filter(HEALTHY_FRUIT).sorted(fruitByName).forEachOrdered(
-				printFruitName
-				.andThen(printFruitTaste)
-				.andThen(printNewline)
+				PRINT_FRUIT_NAME
+				.andThen(PRINT_FRUIT_TASTE)
+				.andThen(PRINT_NEW_LINE)
 		);
 		
 		println("}");
